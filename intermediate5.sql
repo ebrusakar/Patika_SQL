@@ -7,37 +7,38 @@ Aşağıdaki sorgu senaryolarını dvdrental örnek veri tabanı üzerinden ger�
 3.film tablosunda en düşük rental_rate ve en düşün replacement_cost değerlerine sahip filmleri sıralayınız.
 4.payment tablosunda en fazla sayıda alışveriş yapan müşterileri(customer) sıralayınız.
 
-SELECT COUNT (*) AS COUNT
+
+SELECT COUNT (*) AS COUNT    --1
 FROM FILM
 WHERE LENGTH >
 		(SELECT AVG(LENGTH)
 			FROM FILM);
 
 
-SELECT COUNT (*) AS COUNT
+SELECT COUNT (*) AS COUNT    --2
 FROM FILM
 WHERE RENTAL_RATE =
 		(SELECT MAX(RENTAL_RATE)
 			FROM FILM);
 
 
-SELECT TITLE,
+SELECT TITLE,               --3
 	RENTAL_RATE,
 	REPLACEMENT_COST
 FROM FILM
 WHERE (RENTAL_RATE =
-								(SELECT MIN(RENTAL_RATE)
-									FROM FILM)
-							AND REPLACEMENT_COST =
-								(SELECT MIN(REPLACEMENT_COST)
-									FROM FILM));
+		(SELECT MIN(RENTAL_RATE)
+		 FROM FILM)
+		 AND REPLACEMENT_COST =
+			       (SELECT MIN(REPLACEMENT_COST)
+			        FROM FILM));
 
 
-SELECT CUSTOMER_ID,
-	MAX(CUSTOMER_ID_COUNT)
+SELECT CUSTOMER_ID,          --4
+       MAX(CUSTOMER_ID_COUNT)
 FROM
 	(SELECT CUSTOMER_ID,
-			COUNT(CUSTOMER_ID) AS CUSTOMER_ID_COUNT
+		COUNT(CUSTOMER_ID) AS CUSTOMER_ID_COUNT
 		FROM PAYMENT
 		GROUP BY CUSTOMER_ID
 		ORDER BY CUSTOMER_ID_COUNT DESC) AS D
